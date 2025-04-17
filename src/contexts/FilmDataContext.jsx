@@ -4,24 +4,48 @@ import { api } from '../api/api'
 const FilmDataContext = createContext()
 
 export function FilmDataProvider({ children }) {
-  const [filmsData, setFilmsData] = useState()
-  const [isLoading, setIsLoading] = useState(true)
+  const [filmsData, setFilmsData] = useState(null)
+  const [configApi, setConfigApi] = useState(null)
+  const [isLoadingConfigApi, setIsLoadingConfigApi] = useState(false)
+  const [isLoadingFilmsData, setIsLoadingFilmsData] = useState(false)
+  const [errorConfig, setErrorConfig] = useState(null)
+  const [errorFilmsData, setErrorFilmsData] = useState(null)
 
   useEffect(() => {
-    const fetchingData = async () => {
-      try {
-        const data = await api.getFilms()
-        setFilmsData(data)
-      } catch (error) {
-        throw new Error(error.message)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchingData()
+    getConfig()
+    getFilmsData()
   }, [])
 
+  const getConfig = async () => {
+    setIsLoadingConfigApi(true)
+    try {
+      const config = await api.getConfigApi()
+      setConfigApi(config)
+    } catch (error) {
+      setErrorConfig(error.message)
+    } finally {
+      setIsLoadingConfigApi(false)
+    }
+  }
+
+  const getFilmsData = async () => {
+    setIsLoadingFilmsData(true)
+    try {
+      const data = await api.getFilms('return', '2')
+      setFilmsData(data)
+    } catch (error) {
+      setErrorFilmsData(error.message)
+    } finally {
+      setIsLoadingFilmsData(false)
+    }
+  }
+
+  const isLoading = isLoadingConfigApi || isLoadingFilmsData
+  const errors = [errorConfig, errorFilmsData].filter(Boolean)
+
   const value = {
+    configApi,
+    errors,
     filmsData,
     isLoading,
   }
@@ -32,7 +56,7 @@ export function FilmDataProvider({ children }) {
 export const useFilmDataContext = () => {
   const context = useContext(FilmDataContext)
   if (!context) {
-    throw new Error('This component is not part of the provider FilmDataProvider')
+    throw new Error('Этот компонент не является частью провайдера FilmDataProvider')
   }
   return context
 }
