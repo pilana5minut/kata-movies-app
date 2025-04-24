@@ -1,36 +1,15 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import styles from './App.module.css'
+import { Layout } from 'antd'
 
-function App() {
+import { FilmDataProvider } from './contexts/FilmDataContext'
+import FilmsList from './components/FilmsList/FilmsList'
+
+export default function App() {
   return (
-    <>
-      <div>
-        <a
-          href="https://vite.dev"
-          target="_blank"
-        >
-          <img
-            src={viteLogo}
-            className="logo"
-            alt="Vite logo"
-          />
-        </a>
-        <a
-          href="https://react.dev"
-          target="_blank"
-        >
-          <img
-            src={reactLogo}
-            className="logo react"
-            alt="React logo"
-          />
-        </a>
-      </div>
-      <h1>Kata Movies App</h1>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
+    <FilmDataProvider>
+      <Layout.Content className={styles.content}>
+        <FilmsList></FilmsList>
+      </Layout.Content>
+    </FilmDataProvider>
   )
 }
-
-export default App
