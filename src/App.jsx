@@ -1,12 +1,15 @@
-import './App.css'
-import { FilmDataProvider } from './contexts/FilmDataContext'
+import styles from './App.module.css'
+import { Layout } from 'antd'
 
-import FilmGallery from './components/FilmGallery'
+import { FilmDataProvider } from './contexts/FilmDataContext'
+import FilmsList from './components/FilmsList/FilmsList'
 
 export default function App() {
   return (
     <FilmDataProvider>
-      <FilmGallery></FilmGallery>
+      <Layout.Content className={styles.content}>
+        <FilmsList></FilmsList>
+      </Layout.Content>
     </FilmDataProvider>
   )
 }
