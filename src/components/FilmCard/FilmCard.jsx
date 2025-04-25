@@ -30,7 +30,7 @@ export default function FilmCard({ title, overview, releaseDate, popularity, ima
               className={styles.cardTitle}
               title={title}
             >
-              {trimText(title, 26)}
+              {trimText(title, 18)}
             </h3>
             <div className={styles.cardReleaseDate}>{releaseDate}</div>
             <div className={styles.tagsGroup}>

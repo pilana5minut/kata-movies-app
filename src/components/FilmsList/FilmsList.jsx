@@ -12,6 +12,8 @@ export default function FilmsList() {
   if (errors.length > 0) return <div>Errors: {errors.join(', ')}</div>
   if (!filmsData) return <div>Not data!</div>
 
+  console.log('🚥 filmsData  🚥', filmsData.results)
+
   return (
     <Row
       gutter={[36, 36]}

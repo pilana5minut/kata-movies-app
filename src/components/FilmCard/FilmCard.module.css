@@ -23,7 +23,6 @@
 
     .cardPosterWrapper {
       grid-area: poster;
-      background-color: aqua;
 
       .cardPoster {
         width: 100%;
@@ -38,17 +37,19 @@
       padding-left: 20px;
       display: flex;
       justify-content: space-between;
-      /* background-color: tomato; */
 
       .cardHeaderLeft {
         .cardTitle {
           margin: 0;
           margin-bottom: 10px;
           white-space: nowrap;
+          font-size: 20px;
+          font-weight: 400;
         }
 
         .cardReleaseDate {
           margin-bottom: 10px;
+          color: #827e7e;
         }
 
         .tagsGroup {
@@ -80,7 +81,6 @@
       padding-left: 20px;
       display: flex;
       flex-direction: column;
-      /* background-color: gold; */
 
       .filmOverview {
         margin: 0;
@@ -97,12 +97,38 @@
     }
   }
 
-  @container (max-width: 500px) {
+  @container (max-width: 576px) {
+    width: 387px;
+    height: 245px;
+
     .cardInner {
-      border: 1px solid #000;
+      grid-template-columns: 70px;
+      grid-template-rows: 100px auto;
       grid-template-areas:
         'poster header'
         'description description';
+
+      .cardPosterWrapper {
+        padding-left: 10px;
+        padding-top: 10px;
+      }
+
+      .cardHeaderWrapper {
+        padding-left: 10px;
+
+        .cardHeaderLeft {
+          .tagsGroup {
+            width: 260px;
+          }
+        }
+      }
+
+      .cardDescriptionWrapper {
+        padding: 10px;
+        .filmRating {
+          align-self: flex-end;
+        }
+      }
     }
   }
 }
