@@ -15,47 +15,50 @@ export default function FilmCard({ title, overview, releaseDate, popularity, ima
       className={styles.filmCard}
       variant="borderless"
     >
-      <Flex className={styles.cardInner}>
-        <div className={styles.cardImageWrapper}>
+      <div className={styles.cardInner}>
+        <div className={styles.cardPosterWrapper}>
           <img
-            className={styles.cardCoverImage}
+            className={styles.cardPoster}
             src={imageURL}
             alt="Film cover"
             loading="lazy"
           />
         </div>
-        <div className={styles.cardContent}>
-          <div className={styles.cardContentTop}>
-            <div className={styles.cardContentTopLeft}>
-              <h3 title={title}>{trimText(title, 22)}</h3>
-              <div className={styles.cardReleaseDate}>{releaseDate}</div>
-              <div className={styles.tagsWrapper}>
-                <Tag>Action</Tag>
-                <Tag>Drama</Tag>
-                <Tag>Comedy</Tag>
-                <Tag>Horror</Tag>
-                <Tag>Thriller</Tag>
-              </div>
-            </div>
-            <div className={styles.cardContentTopRight}>
-              <div
-                className={styles.voteAverage}
-                style={{ borderColor: getRatingColor(popularity) }}
-              >
-                {popularity}
-              </div>
+        <div className={styles.cardHeaderWrapper}>
+          <div className={styles.cardHeaderLeft}>
+            <h3
+              className={styles.cardTitle}
+              title={title}
+            >
+              {trimText(title, 26)}
+            </h3>
+            <div className={styles.cardReleaseDate}>{releaseDate}</div>
+            <div className={styles.tagsGroup}>
+              <Tag>Action</Tag>
+              <Tag>Drama</Tag>
+              <Tag>Comedy</Tag>
+              <Tag>Horror</Tag>
+              <Tag>Thriller</Tag>
             </div>
           </div>
-          <div className={styles.cardContentBottom}>
-            <p className={styles.cardOverview}>{trimText(overview, 230)}</p>
-            <Rate
-              className={styles.filmRating}
-              count={10}
-              allowHalf
-            ></Rate>
+          <div className={styles.cardHeaderRight}>
+            <div
+              className={styles.voteAverage}
+              style={{ borderColor: getRatingColor(popularity) }}
+            >
+              {popularity}
+            </div>
           </div>
         </div>
-      </Flex>
+        <div className={styles.cardDescriptionWrapper}>
+          <p className={styles.filmOverview}>{trimText(overview, 220)}</p>
+          <Rate
+            className={styles.filmRating}
+            count={10}
+            allowHalf
+          ></Rate>
+        </div>
+      </div>
     </Card>
   )
 }

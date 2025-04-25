@@ -27,7 +27,7 @@ export default function FilmsList() {
                 film.release_date ? format(new Date(film.release_date), 'MMMM d, yyyy') : 'No date.'
               }
               popularity={film.popularity ? Number(film.popularity.toFixed(1)) : 'No data.'}
-              imageURL={`${getImageURL(configApi, 0)}${film.poster_path}`}
+              imageURL={`${getImageURL(configApi, 1)}${film.poster_path}`}
             ></FilmCard>
           </Col>
         )

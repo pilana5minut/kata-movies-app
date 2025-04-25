@@ -31,7 +31,7 @@ export function FilmDataProvider({ children }) {
   const getFilmsData = async () => {
     setIsLoadingFilmsData(true)
     try {
-      const data = await api.getFilms('blade', '3')
+      const data = await api.getFilms('star wars', '3')
       setFilmsData(data)
     } catch (error) {
       setErrorFilmsData(error.message)
