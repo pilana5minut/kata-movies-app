@@ -25,23 +25,35 @@ export default function FilmCard({ title, overview, releaseDate, popularity, ima
           />
         </div>
         <div className={styles.cardContent}>
-          <h3 title={title}>{trimText(title, 22)}</h3>
-          <div
-            className={styles.voteAverage}
-            style={{ borderColor: getRatingColor(popularity) }}
-          >
-            {popularity}
+          <div className={styles.cardContentTop}>
+            <div className={styles.cardContentTopLeft}>
+              <h3 title={title}>{trimText(title, 22)}</h3>
+              <div className={styles.cardReleaseDate}>{releaseDate}</div>
+              <div className={styles.tagsWrapper}>
+                <Tag>Action</Tag>
+                <Tag>Drama</Tag>
+                <Tag>Comedy</Tag>
+                <Tag>Horror</Tag>
+                <Tag>Thriller</Tag>
+              </div>
+            </div>
+            <div className={styles.cardContentTopRight}>
+              <div
+                className={styles.voteAverage}
+                style={{ borderColor: getRatingColor(popularity) }}
+              >
+                {popularity}
+              </div>
+            </div>
           </div>
-          <Tag>Action</Tag>
-          <Tag>Drama</Tag>
-          <Tag>Horror</Tag>
-          <span className={styles.cardReleaseDate}>{releaseDate}</span>
-          <p className={styles.cardOverview}>{trimText(overview, 122)}</p>
-          <Rate
-            className={styles.filmRating}
-            count={10}
-            allowHalf
-          ></Rate>
+          <div className={styles.cardContentBottom}>
+            <p className={styles.cardOverview}>{trimText(overview, 230)}</p>
+            <Rate
+              className={styles.filmRating}
+              count={10}
+              allowHalf
+            ></Rate>
+          </div>
         </div>
       </Flex>
     </Card>
