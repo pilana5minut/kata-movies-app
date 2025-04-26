@@ -1,18 +1,37 @@
+import { Row, Col, Spin, Alert, Empty } from 'antd'
+import { format } from 'date-fns'
 import { getImageURL } from '../../utils/utils'
 import { useFilmDataContext } from '../../contexts/FilmDataContext'
-import { format } from 'date-fns'
-import { Row, Col } from 'antd'
-
 import FilmCard from '../FilmCard/FilmCard'
+import styles from './FilmsList.module.css'
 
 export default function FilmsList() {
   const { configApi, errors, filmsData, isLoading } = useFilmDataContext()
 
-  if (isLoading) return <div>Loading...</div>
-  if (errors.length > 0) return <div>Errors: {errors.join(', ')}</div>
-  if (!filmsData) return <div>Not data!</div>
+  if (isLoading) {
+    return (
+      <Spin
+        fullscreen
+        size="large"
+        tip="Загрузка данных"
+      ></Spin>
+    )
+  }
 
-  console.log('🚥 filmsData  🚥', filmsData.results)
+  if (errors.length > 0) {
+    return errors.map((error) => (
+      <Alert
+        className={styles.errorBanner}
+        type="error"
+        showIcon
+        message={error}
+      ></Alert>
+    ))
+  }
+
+  if (!filmsData) {
+    return <Empty description="Данные отсутствуют."></Empty>
+  }
 
   return (
     <Row
