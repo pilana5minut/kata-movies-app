@@ -12,7 +12,7 @@ const requestOptions = {
 }
 
 export const api = {
-  async getFilms(queryValue, page) {
+  async getFilms(queryValue, page = 1) {
     console.log('выполняется запрос фильмов...')
     try {
       const response = await fetch(

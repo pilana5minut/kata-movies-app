@@ -13,7 +13,6 @@ export function FilmDataProvider({ children }) {
 
   useEffect(() => {
     getConfig()
-    // getFilmsData()
   }, [])
 
   const getConfig = async () => {
@@ -44,7 +43,6 @@ export function FilmDataProvider({ children }) {
   const errors = [errorConfig, errorFilmsData].filter(Boolean)
 
   const value = {
-    getConfig,
     getFilmsData,
     configApi,
     errors,

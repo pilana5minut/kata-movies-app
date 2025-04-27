@@ -10,11 +10,9 @@ export default function FilmsList() {
 
   if (isLoading) {
     return (
-      <Spin
-        fullscreen
-        size="large"
-        tip="Загрузка данных"
-      ></Spin>
+      <div className={styles.spinner}>
+        <Spin size="large"></Spin>
+      </div>
     )
   }
 

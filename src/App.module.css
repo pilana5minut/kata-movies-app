@@ -1,7 +1,6 @@
 .header {
+  padding: 0 35px;
   background-color: white;
-  outline: 1px solid greenyellow;
-  outline-offset: -1px;
 }
 
 .content {
