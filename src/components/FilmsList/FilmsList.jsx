@@ -35,6 +35,7 @@ export default function FilmsList() {
 
   return (
     <Row
+      className={styles.filmsList}
       gutter={[36, 36]}
       justify="center "
     >

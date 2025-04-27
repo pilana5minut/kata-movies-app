@@ -1,3 +1,7 @@
+.filmsList {
+  container-type: inline-size;
+}
+
 .errorBanner {
   margin: 10px;
 }
