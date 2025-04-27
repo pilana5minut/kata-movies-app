@@ -1,3 +1,9 @@
+.header {
+  background-color: white;
+  outline: 1px solid greenyellow;
+  outline-offset: -1px;
+}
+
 .content {
   padding: 0 20px;
   background-color: white;

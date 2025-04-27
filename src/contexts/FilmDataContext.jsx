@@ -13,7 +13,7 @@ export function FilmDataProvider({ children }) {
 
   useEffect(() => {
     getConfig()
-    getFilmsData()
+    // getFilmsData()
   }, [])
 
   const getConfig = async () => {
@@ -28,10 +28,10 @@ export function FilmDataProvider({ children }) {
     }
   }
 
-  const getFilmsData = async () => {
+  const getFilmsData = async (...args) => {
     setIsLoadingFilmsData(true)
     try {
-      const data = await api.getFilms('star wars', '3')
+      const data = await api.getFilms(...args)
       setFilmsData(data)
     } catch (error) {
       setErrorFilmsData(error.message)
@@ -44,6 +44,8 @@ export function FilmDataProvider({ children }) {
   const errors = [errorConfig, errorFilmsData].filter(Boolean)
 
   const value = {
+    getConfig,
+    getFilmsData,
     configApi,
     errors,
     filmsData,

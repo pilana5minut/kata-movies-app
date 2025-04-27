@@ -10,3 +10,13 @@ export const trimText = (text, maxLength) => {
 
   return text.slice(0, lastSpaceIndex)
 }
+
+export function debounce(delay, fn) {
+  let timerId
+  return (...args) => {
+    clearTimeout(timerId)
+    timerId = setTimeout(() => {
+      fn(...args)
+    }, delay)
+  }
+}

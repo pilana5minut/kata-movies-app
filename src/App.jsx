@@ -3,6 +3,7 @@ import { FilmDataProvider } from './contexts/FilmDataContext'
 import useNetworkStatus from './utils/hooks'
 import styles from './App.module.css'
 import FilmsList from './components/FilmsList/FilmsList'
+import SearchBar from './components/SearchBar/SearchBar'
 
 export default function App() {
   const networkStatus = useNetworkStatus()
@@ -11,7 +12,9 @@ export default function App() {
     <FilmDataProvider>
       {networkStatus ? (
         <>
-          <Layout.Header></Layout.Header>
+          <Layout.Header className={styles.header}>
+            <SearchBar></SearchBar>
+          </Layout.Header>
           <Layout.Content className={styles.content}>
             <FilmsList></FilmsList>
           </Layout.Content>

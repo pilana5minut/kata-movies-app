@@ -30,7 +30,12 @@ export default function FilmsList() {
   }
 
   if (!filmsData) {
-    return <Empty description="Данные отсутствуют."></Empty>
+    return (
+      <Empty
+        className={styles.empty}
+        description="Данные отсутствуют."
+      ></Empty>
+    )
   }
 
   return (

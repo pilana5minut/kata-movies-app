@@ -13,6 +13,7 @@ const requestOptions = {
 
 export const api = {
   async getFilms(queryValue, page) {
+    console.log('выполняется запрос фильмов...')
     try {
       const response = await fetch(
         `${BASE_URL}/3/search/movie?query=${queryValue}&page=${page}`,
@@ -28,6 +29,7 @@ export const api = {
   },
 
   async getConfigApi() {
+    console.log('выполняется запрос конфигурации API...')
     try {
       const response = await fetch(`${BASE_URL}/3/configuration`, requestOptions)
       if (!response.ok) {
