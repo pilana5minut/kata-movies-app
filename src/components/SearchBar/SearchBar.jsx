@@ -1,13 +1,29 @@
 import { Input } from 'antd'
 import { useFilmDataContext } from '../../contexts/FilmDataContext'
 import { debounce } from '../../utils/utils'
+import { useState, useCallback } from 'react'
 
 export default function SearchBar() {
-  const { getFilmsData } = useFilmDataContext()
+  const { setQueryStringValue, getFilmsData } = useFilmDataContext()
+  const [currentStringValue, setCurrentStringValue] = useState('')
 
-  const handleSearchQuery = debounce(555, (e) => {
-    getFilmsData(e.target.value)
-  })
+  const debouncedSearch = useCallback(
+    debounce(777, (queryString) => {
+      setQueryStringValue(queryString)
+      getFilmsData(queryString)
+    }),
+    [setQueryStringValue, getFilmsData]
+  )
 
-  return <Input onChange={(e) => handleSearchQuery(e)}></Input>
+  const handleSearchQuery = (e) => {
+    setCurrentStringValue(e.target.value)
+    debouncedSearch(e.target.value)
+  }
+
+  return (
+    <Input
+      value={currentStringValue}
+      onChange={(e) => handleSearchQuery(e)}
+    />
+  )
 }

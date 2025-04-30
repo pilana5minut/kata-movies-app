@@ -10,6 +10,7 @@ export function FilmDataProvider({ children }) {
   const [isLoadingFilmsData, setIsLoadingFilmsData] = useState(false)
   const [errorConfig, setErrorConfig] = useState(null)
   const [errorFilmsData, setErrorFilmsData] = useState(null)
+  const [queryStringValue, setQueryStringValue] = useState('')
 
   useEffect(() => {
     getConfig()
@@ -27,10 +28,10 @@ export function FilmDataProvider({ children }) {
     }
   }
 
-  const getFilmsData = async (...args) => {
+  const getFilmsData = async (queryStringValue, page) => {
     setIsLoadingFilmsData(true)
     try {
-      const data = await api.getFilms(...args)
+      const data = await api.getFilms(queryStringValue, page)
       setFilmsData(data)
     } catch (error) {
       setErrorFilmsData(error.message)
@@ -44,6 +45,8 @@ export function FilmDataProvider({ children }) {
 
   const value = {
     getFilmsData,
+    queryStringValue,
+    setQueryStringValue,
     configApi,
     errors,
     filmsData,
