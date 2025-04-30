@@ -1,13 +1,13 @@
 import { Row, Col, Spin, Alert, Empty, Pagination } from 'antd'
 import { format } from 'date-fns'
-import { getImageURL } from '../../utils/utils'
+import { getImageURL, getGenreListById } from '../../utils/utils'
 import { useFilmDataContext } from '../../contexts/FilmDataContext'
 import FilmCard from '../FilmCard/FilmCard'
 import styles from './FilmsList.module.css'
 import { useState } from 'react'
 
 export default function FilmsList() {
-  const { configApi, errors, filmsData, isLoading, getFilmsData, queryStringValue } =
+  const { configApi, errors, filmsData, isLoading, getFilmsData, queryStringValue, genres } =
     useFilmDataContext()
   const [currentPage, setCurrentPage] = useState(1)
 
@@ -38,16 +38,6 @@ export default function FilmsList() {
       ></Empty>
     )
   }
-
-  // console.log('🚥 filmsData.results 🚥', filmsData.results)
-  // filmsData.results.forEach((film, index) => {
-  //   if (index <= 5) {
-  //     console.log('film id: ', film.id)
-  //   }
-  // })
-  // console.log('🚥 filmsData.page 🚥', filmsData.page)
-  // console.log('🚥 filmsData.total_pages 🚥', filmsData.total_pages)
-  // console.log('🚥 filmsData.total_results 🚥', filmsData.total_results)
 
   return (
     <>
@@ -88,6 +78,7 @@ export default function FilmsList() {
                 }
                 popularity={film.popularity ? Number(film.popularity.toFixed(1)) : null}
                 imageURL={`${getImageURL(configApi, 1)}${film.poster_path}`}
+                genreList={getGenreListById(genres, film)}
               ></FilmCard>
             </Col>
           )

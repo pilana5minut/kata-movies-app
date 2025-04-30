@@ -1,8 +1,15 @@
-import { Flex, Card, Tag, Rate } from 'antd'
+import { Card, Tag, Rate } from 'antd'
 import { trimText } from '../../utils/utils'
 import styles from './FilmCard.module.css'
 
-export default function FilmCard({ title, overview, releaseDate, popularity, imageURL }) {
+export default function FilmCard({
+  title,
+  overview,
+  releaseDate,
+  popularity,
+  imageURL,
+  genreList,
+}) {
   const getRatingColor = (rating) => {
     if (rating <= 3) return '#e90000'
     if (rating <= 5) return '#e97e00'
@@ -34,11 +41,9 @@ export default function FilmCard({ title, overview, releaseDate, popularity, ima
             </h3>
             <div className={styles.cardReleaseDate}>{releaseDate}</div>
             <div className={styles.tagsGroup}>
-              <Tag>Action</Tag>
-              <Tag>Drama</Tag>
-              <Tag>Comedy</Tag>
-              <Tag>Horror</Tag>
-              <Tag>Thriller</Tag>
+              {genreList.map((genre) => {
+                return <Tag key={genre.id}>{genre.name}</Tag>
+              })}
             </div>
           </div>
           <div className={styles.cardHeaderRight}>

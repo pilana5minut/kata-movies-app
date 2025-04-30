@@ -20,3 +20,9 @@ export function debounce(delay, fn) {
     }, delay)
   }
 }
+
+export function getGenreListById(genreList, film) {
+  return genreList.genres.filter((genre) => {
+    return film.genre_ids.some((id) => id === genre.id)
+  })
+}
