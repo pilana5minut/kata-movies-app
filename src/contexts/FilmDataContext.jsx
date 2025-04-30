@@ -4,17 +4,33 @@ import { api } from '../api/api'
 const FilmDataContext = createContext()
 
 export function FilmDataProvider({ children }) {
-  const [filmsData, setFilmsData] = useState(null)
   const [configApi, setConfigApi] = useState(null)
+  const [filmsData, setFilmsData] = useState(null)
+  const [genres, setGenres] = useState(null)
   const [isLoadingConfigApi, setIsLoadingConfigApi] = useState(false)
   const [isLoadingFilmsData, setIsLoadingFilmsData] = useState(false)
+  const [isLoadingGenresList, setIsLoadingGenresList] = useState(false)
   const [errorConfig, setErrorConfig] = useState(null)
   const [errorFilmsData, setErrorFilmsData] = useState(null)
+  const [errorGenresList, setErrorGenresList] = useState(null)
   const [queryStringValue, setQueryStringValue] = useState('')
 
   useEffect(() => {
     getConfig()
+    fetchingGenresList()
   }, [])
+
+  const fetchingGenresList = async () => {
+    setIsLoadingGenresList(true)
+    try {
+      const genresList = await api.getGenresList()
+      setGenres(genresList)
+    } catch (error) {
+      setErrorGenresList(error.message)
+    } finally {
+      setIsLoadingGenresList(false)
+    }
+  }
 
   const getConfig = async () => {
     setIsLoadingConfigApi(true)
@@ -40,8 +56,8 @@ export function FilmDataProvider({ children }) {
     }
   }
 
-  const isLoading = isLoadingConfigApi || isLoadingFilmsData
-  const errors = [errorConfig, errorFilmsData].filter(Boolean)
+  const isLoading = isLoadingConfigApi || isLoadingFilmsData || isLoadingGenresList
+  const errors = [errorConfig, errorFilmsData, errorGenresList].filter(Boolean)
 
   const value = {
     getFilmsData,
@@ -51,6 +67,7 @@ export function FilmDataProvider({ children }) {
     errors,
     filmsData,
     isLoading,
+    genres,
   }
 
   return <FilmDataContext.Provider value={value}>{children}</FilmDataContext.Provider>
