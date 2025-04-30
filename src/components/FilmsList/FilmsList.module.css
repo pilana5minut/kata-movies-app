@@ -1,3 +1,19 @@
+.filmsList {
+  margin-top: 10px;
+  container-type: inline-size;
+}
+
+.spinner {
+  min-height: 100%;
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
 .errorBanner {
   margin: 10px;
+}
+
+.empty {
+  margin: 10px 0;
 }

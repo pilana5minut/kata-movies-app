@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export default function useStatusNetwork() {
+export default function useNetworkStatus() {
   const [isOnline, setIsOnline] = useState(true)
 
   const handleOnline = () => {

@@ -12,7 +12,8 @@ const requestOptions = {
 }
 
 export const api = {
-  async getFilms(queryValue, page) {
+  async getFilms(queryValue, page = 1) {
+    console.log('Выполняется запрос фильмов...')
     try {
       const response = await fetch(
         `${BASE_URL}/3/search/movie?query=${queryValue}&page=${page}`,
@@ -21,6 +22,7 @@ export const api = {
       if (!response.ok) {
         throw new Error('Ошибка запроса данных о фильмах.')
       }
+      console.log('Список фильмов получен.')
       return await response.json()
     } catch (error) {
       throw new Error(error.message)
@@ -28,11 +30,13 @@ export const api = {
   },
 
   async getConfigApi() {
+    console.log('Выполняется запрос конфигурации API...')
     try {
       const response = await fetch(`${BASE_URL}/3/configuration`, requestOptions)
       if (!response.ok) {
         throw new Error('Ошибка запроса конфигурации API')
       }
+      console.log('Конфигурации API получена.')
       return await response.json()
     } catch (error) {
       throw new Error(error.message)
