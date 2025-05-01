@@ -7,14 +7,17 @@ export function FilmDataProvider({ children }) {
   const [configApi, setConfigApi] = useState(null)
   const [filmsData, setFilmsData] = useState(null)
   const [genres, setGenres] = useState(null)
+
   const [isLoadingConfigApi, setIsLoadingConfigApi] = useState(false)
   const [isLoadingFilmsData, setIsLoadingFilmsData] = useState(false)
   const [isLoadingGenresList, setIsLoadingGenresList] = useState(false)
   const [isLoadingGuestSession, setIsLoadingGuestSession] = useState(false)
+
   const [errorConfig, setErrorConfig] = useState(null)
   const [errorFilmsData, setErrorFilmsData] = useState(null)
   const [errorGenresList, setErrorGenresList] = useState(null)
   const [errorGuestSession, setErrorGuestSession] = useState(null)
+
   const [queryStringValue, setQueryStringValue] = useState('')
   const [guestSessionId, setGuestSessionId] = useState(null)
 
@@ -67,24 +70,24 @@ export function FilmDataProvider({ children }) {
         const ExpirationDate = Date.parse(guestSessionObject.expires_at)
 
         if (ExpirationDate < Date.now()) {
-          console.log('(SG) Срок действия гостевой сессии истек.')
+          console.log('(GS) Срок действия гостевой сессии истек.')
           setIsLoadingGuestSession(true)
           const newSession = await api.createGuestSession()
           setGuestSessionId(newSession.guest_session_id)
           localStorage.setItem('guestSessionObject', JSON.stringify(newSession))
-          console.log('(SG) Новая гостевая сессия была записана в localStorage.')
+          console.log('(GS) Новая гостевая сессия была записана в localStorage.')
         } else {
-          console.log('(SG) Гостевая сессия уже существует.')
+          console.log('(GS) Гостевая сессия уже существует.')
           const guestSessionObject = JSON.parse(localStorage.getItem('guestSessionObject'))
           setGuestSessionId(guestSessionObject.guest_session_id)
         }
       } else {
-        console.log('(SG) Гостевая сессия еще не создана.')
+        console.log('(GS) Гостевая сессия еще не создана.')
         setIsLoadingGuestSession(true)
         const newSession = await api.createGuestSession()
         setGuestSessionId(newSession.guest_session_id)
         localStorage.setItem('guestSessionObject', JSON.stringify(newSession))
-        console.log('(SG) Новая гостевая сессия была записана в localStorage.')
+        console.log('(GS) Новая гостевая сессия была записана в localStorage.')
       }
     } catch (error) {
       setErrorGuestSession(error.message)

@@ -1,10 +1,10 @@
 const BASE_URL = 'https://api.themoviedb.org/3/'
-const TOKEN =
+const API_KEY =
   'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NjQzZjExMzEzMmJmZGM1ZTEwNzhlNDBiMGM5YzcwYyIsIm5iZiI6MTc0NDY0MzUxOC42Miwic3ViIjoiNjdmZDI1YmU2MWIxYzRiYjMyOTkzNjE0Iiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.20F_0vgAgC47pU_aFRXFtncwF5HGM84QIx7PoW4kGBU'
 
 const myHeaders = new Headers()
 myHeaders.append('accept', 'application/json')
-myHeaders.append('Authorization', `Bearer ${TOKEN}`)
+myHeaders.append('Authorization', `Bearer ${API_KEY}`)
 
 const requestOptions = {
   method: 'GET',
@@ -19,9 +19,11 @@ export const api = {
         `${BASE_URL}search/movie?query=${queryValue}&page=${page}`,
         requestOptions
       )
+
       if (!response.ok) {
         throw new Error('Ошибка запроса данных о фильмах.')
       }
+
       console.log('Список фильмов получен.')
       return await response.json()
     } catch (error) {
@@ -33,9 +35,11 @@ export const api = {
     console.log('Выполняется запрос конфигурации API...')
     try {
       const response = await fetch(`${BASE_URL}configuration`, requestOptions)
+
       if (!response.ok) {
         throw new Error('Ошибка запроса конфигурации API')
       }
+
       console.log('Конфигурации API получена.')
       return await response.json()
     } catch (error) {
@@ -61,15 +65,55 @@ export const api = {
 
   async createGuestSession() {
     try {
-      console.log('(SG) Выполняется запрос новой гостевой сессии...')
-
+      console.log('(GS) Выполняется запрос новой гостевой сессии...')
       const response = await fetch(`${BASE_URL}authentication/guest_session/new`, requestOptions)
 
       if (!response.ok) {
         throw new Error('Ошибка при создании гостевой сессии.')
       }
 
-      console.log('(SG) Была создана новая гостевая сессия.')
+      console.log('(GS) Была создана новая гостевая сессия.')
+      return await response.json()
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  },
+
+  async addRatingForMovie(movieId, ratingValue, guestSessionId) {
+    try {
+      const response = await fetch(
+        `${BASE_URL}movie/${movieId}/rating?api_key=${API_KEY}&guest_session_id=${guestSessionId}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json;charset=utf-8' },
+          body: JSON.stringify({ value: ratingValue }),
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error('Ошибка при добавлении рейтинга для фильма.')
+      }
+
+      const data = await response.json()
+      console.log('Результат добавления рейтинга', data)
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  },
+
+  async getListRatedMovies(guestSessionId) {
+    console.log('Выполняется запрос фильмов имеющих оценку...')
+    try {
+      const response = await fetch(
+        `${BASE_URL}guest_session/${guestSessionId}/rated/movies`,
+        requestOptions
+      )
+
+      if (!response.ok) {
+        throw new Error('Ошибка запроса фильмов имеющих оценку.')
+      }
+
+      console.log('Список фильмов имеющих оценку получен.')
       return await response.json()
     } catch (error) {
       throw new Error(error.message)
