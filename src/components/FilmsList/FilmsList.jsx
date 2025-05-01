@@ -15,13 +15,15 @@ export default function FilmsList() {
     return (
       <div className={styles.spinner}>
         <Spin size="large"></Spin>
+        <span>Please wait.</span>
       </div>
     )
   }
 
   if (errors.length > 0) {
-    return errors.map((error) => (
+    return errors.map((error, index) => (
       <Alert
+        key={index}
         className={styles.errorBanner}
         type="error"
         showIcon
@@ -34,7 +36,8 @@ export default function FilmsList() {
     return (
       <Empty
         className={styles.empty}
-        description="Данные отсутствуют."
+        description="No data to display."
+        image={Empty.PRESENTED_IMAGE_SIMPLE}
       ></Empty>
     )
   }
@@ -57,7 +60,8 @@ export default function FilmsList() {
       ) : (
         <Empty
           className={styles.empty}
-          description="Данные отсутствуют."
+          description="No data to display."
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
         ></Empty>
       )}
       <Row

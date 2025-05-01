@@ -58,4 +58,21 @@ export const api = {
       throw new Error(error.message)
     }
   },
+
+  async createGuestSession() {
+    try {
+      console.log('(SG) Выполняется запрос новой гостевой сессии...')
+
+      const response = await fetch(`${BASE_URL}authentication/guest_session/new`, requestOptions)
+
+      if (!response.ok) {
+        throw new Error('Ошибка при создании гостевой сессии.')
+      }
+
+      console.log('(SG) Была создана новая гостевая сессия.')
+      return await response.json()
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  },
 }
