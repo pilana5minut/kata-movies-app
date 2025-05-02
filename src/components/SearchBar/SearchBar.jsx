@@ -1,7 +1,7 @@
+import { useState, useCallback } from 'react'
 import { Input } from 'antd'
 import { useFilmDataContext } from '../../contexts/FilmDataContext'
 import { debounce } from '../../utils/utils'
-import { useState, useCallback } from 'react'
 
 export default function SearchBar() {
   const { setQueryStringValue, getFilmsData } = useFilmDataContext()

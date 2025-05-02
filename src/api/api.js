@@ -87,19 +87,22 @@ export const api = {
         requestOptions
       )
 
-      console.log('🚥 response.status 🚥', response.status)
-
       if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error(
+            'Недействительный ключ API: вам должен быть предоставлен действительный ключ.'
+          )
+        }
+
         if (response.status === 404) {
           throw new Error('Запрошенная сессия не найдена.')
         }
+
         throw new Error('Ошибка запроса фильмов имеющих оценку.')
       }
 
       console.log('Список фильмов имеющих оценку получен.')
-      const result = await response.json()
-      console.log('🚥 List Rated Movies 🚥', result)
-      // return await response.json()
+      return await response.json()
     } catch (error) {
       throw new Error(error.message)
     }

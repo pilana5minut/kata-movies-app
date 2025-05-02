@@ -6,6 +6,7 @@ const FilmDataContext = createContext()
 export function FilmDataProvider({ children }) {
   const [configApi, setConfigApi] = useState(null)
   const [filmsData, setFilmsData] = useState(null)
+  const [filmsRatedData, setFilmsRatedData] = useState(null)
   const [genres, setGenres] = useState(null)
 
   const [isLoadingConfigApi, setIsLoadingConfigApi] = useState(false)
@@ -15,18 +16,34 @@ export function FilmDataProvider({ children }) {
 
   const [errorConfig, setErrorConfig] = useState(null)
   const [errorFilmsData, setErrorFilmsData] = useState(null)
+  const [errorFilmsRatedData, setErrorFilmsRatedData] = useState(null)
   const [errorGenresList, setErrorGenresList] = useState(null)
   const [errorGuestSession, setErrorGuestSession] = useState(null)
 
   const [queryStringValue, setQueryStringValue] = useState('')
   const [guestSessionId, setGuestSessionId] = useState(null)
   const [activeTab, setActiveTab] = useState('1')
+  const [renderedList, setRenderedList] = useState(null)
 
   useEffect(() => {
     getConfig()
     fetchingGenresList()
     getGuestSessionValue()
   }, [])
+
+  useEffect(() => {
+    if (activeTab === '1') {
+      setRenderedList(filmsData)
+    } else if (activeTab === '2') {
+      setRenderedList(filmsRatedData)
+    }
+  }, [activeTab, filmsData, filmsRatedData])
+
+  useEffect(() => {
+    if (guestSessionId) {
+      getFilmsRatedData(guestSessionId)
+    }
+  }, [guestSessionId])
 
   const fetchingGenresList = async () => {
     setIsLoadingGenresList(true)
@@ -61,6 +78,15 @@ export function FilmDataProvider({ children }) {
       setErrorFilmsData(error.message)
     } finally {
       setIsLoadingFilmsData(false)
+    }
+  }
+
+  const getFilmsRatedData = async (guestSessionId) => {
+    try {
+      const data = await api.getListRatedMovies(guestSessionId)
+      setFilmsRatedData(data)
+    } catch (error) {
+      setErrorFilmsRatedData(error.message)
     }
   }
 
@@ -99,10 +125,18 @@ export function FilmDataProvider({ children }) {
 
   const isLoading =
     isLoadingConfigApi || isLoadingFilmsData || isLoadingGenresList || isLoadingGuestSession
-  const errors = [errorConfig, errorFilmsData, errorGenresList, errorGuestSession].filter(Boolean)
 
-  const value = {
+  const errors = [
+    errorConfig,
+    errorFilmsData,
+    errorGenresList,
+    errorGuestSession,
+    errorFilmsRatedData,
+  ].filter(Boolean)
+
+  const providerValue = {
     getFilmsData,
+    filmsRatedData,
     queryStringValue,
     setQueryStringValue,
     configApi,
@@ -113,9 +147,10 @@ export function FilmDataProvider({ children }) {
     guestSessionId,
     activeTab,
     setActiveTab,
+    renderedList,
   }
 
-  return <FilmDataContext.Provider value={value}>{children}</FilmDataContext.Provider>
+  return <FilmDataContext.Provider value={providerValue}>{children}</FilmDataContext.Provider>
 }
 
 export const useFilmDataContext = () => {
