@@ -1,4 +1,4 @@
-/* .tabsBar {
+.tabsBar {
   background-color: white;
   :global(.ant-tabs-nav) {
     &::before {
@@ -21,4 +21,4 @@
 .warningBanner {
   max-width: 900px;
   margin: 10px auto;
-} */
+}

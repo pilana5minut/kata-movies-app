@@ -20,6 +20,7 @@ export function FilmDataProvider({ children }) {
 
   const [queryStringValue, setQueryStringValue] = useState('')
   const [guestSessionId, setGuestSessionId] = useState(null)
+  const [activeTab, setActiveTab] = useState('1')
 
   useEffect(() => {
     getConfig()
@@ -110,6 +111,8 @@ export function FilmDataProvider({ children }) {
     isLoading,
     genres,
     guestSessionId,
+    activeTab,
+    setActiveTab,
   }
 
   return <FilmDataContext.Provider value={value}>{children}</FilmDataContext.Provider>
