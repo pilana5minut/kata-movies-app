@@ -1,8 +1,12 @@
 import { Card, Tag, Rate } from 'antd'
 import { trimText } from '../../utils/utils'
+import { api } from '../../api/api'
+
 import styles from './FilmCard.module.css'
 
 export default function FilmCard({
+  filmId,
+  guestSessionId,
   title,
   overview,
   releaseDate,
@@ -56,7 +60,15 @@ export default function FilmCard({
           </div>
         </div>
         <div className={styles.cardDescriptionWrapper}>
-          <p className={styles.filmOverview}>{trimText(overview, 220)}</p>
+          {/* <p className={styles.filmOverview}>{trimText(overview, 220)}</p> */}
+          <button
+            onClick={() => {
+              api.addRatingForMovie(filmId, 5, guestSessionId)
+            }}
+            type="button"
+          >
+            Rating 5
+          </button>
           <Rate
             className={styles.filmRating}
             count={10}

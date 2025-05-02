@@ -56,7 +56,7 @@ export const api = {
         throw new Error('Ошибка запроса списка жанров')
       }
 
-      console.log('Списка жанров получен.')
+      console.log('Список жанров получен.')
       return await response.json()
     } catch (error) {
       throw new Error(error.message)
@@ -79,28 +79,6 @@ export const api = {
     }
   },
 
-  async addRatingForMovie(movieId, ratingValue, guestSessionId) {
-    try {
-      const response = await fetch(
-        `${BASE_URL}movie/${movieId}/rating?api_key=${API_KEY}&guest_session_id=${guestSessionId}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json;charset=utf-8' },
-          body: JSON.stringify({ value: ratingValue }),
-        }
-      )
-
-      if (!response.ok) {
-        throw new Error('Ошибка при добавлении рейтинга для фильма.')
-      }
-
-      const data = await response.json()
-      console.log('Результат добавления рейтинга', data)
-    } catch (error) {
-      throw new Error(error.message)
-    }
-  },
-
   async getListRatedMovies(guestSessionId) {
     console.log('Выполняется запрос фильмов имеющих оценку...')
     try {
@@ -109,12 +87,47 @@ export const api = {
         requestOptions
       )
 
+      console.log('🚥 response.status 🚥', response.status)
+
       if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error('Запрошенная сессия не найдена.')
+        }
         throw new Error('Ошибка запроса фильмов имеющих оценку.')
       }
 
       console.log('Список фильмов имеющих оценку получен.')
-      return await response.json()
+      const result = await response.json()
+      console.log('🚥 List Rated Movies 🚥', result)
+      // return await response.json()
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  },
+
+  async addRatingForMovie(movieId, ratingValue, guestSessionId) {
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        accept: 'application/json',
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify({ value: ratingValue }),
+    }
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}movie/${movieId}/rating?guest_session_id=${guestSessionId}`,
+        requestOptions
+      )
+
+      if (!response.ok) {
+        throw new Error('Ошибка при добавлении рейтинга для фильма.')
+      }
+
+      const data = await response.json()
+      console.log('Оценка фильму успешно добавлена.', data)
     } catch (error) {
       throw new Error(error.message)
     }

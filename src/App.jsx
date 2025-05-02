@@ -4,6 +4,7 @@ import useNetworkStatus from './utils/hooks'
 import styles from './App.module.css'
 import FilmsList from './components/FilmsList/FilmsList'
 import SearchBar from './components/SearchBar/SearchBar'
+import TempRatedList from './components/TempRatedList/TempRatedList'
 
 export default function App() {
   const networkStatus = useNetworkStatus()
@@ -37,11 +38,14 @@ export default function App() {
   return (
     <FilmDataProvider>
       {networkStatus ? (
-        <Tabs
-          className={styles.tabsBar}
-          items={items}
-          centered
-        ></Tabs>
+        <>
+          <TempRatedList />
+          <Tabs
+            className={styles.tabsBar}
+            items={items}
+            centered
+          ></Tabs>
+        </>
       ) : (
         <Alert
           className={styles.warningBanner}

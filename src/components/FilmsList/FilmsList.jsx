@@ -7,8 +7,16 @@ import styles from './FilmsList.module.css'
 import { useState } from 'react'
 
 export default function FilmsList() {
-  const { configApi, errors, filmsData, isLoading, getFilmsData, queryStringValue, genres } =
-    useFilmDataContext()
+  const {
+    configApi,
+    errors,
+    filmsData,
+    isLoading,
+    getFilmsData,
+    queryStringValue,
+    genres,
+    guestSessionId,
+  } = useFilmDataContext()
   const [currentPage, setCurrentPage] = useState(1)
 
   if (isLoading) {
@@ -73,6 +81,8 @@ export default function FilmsList() {
           return (
             <Col key={film.id}>
               <FilmCard
+                filmId={film.id}
+                guestSessionId={guestSessionId}
                 title={film.title ? film.title : 'No title.'}
                 overview={film.overview ? film.overview : 'No overview.'}
                 releaseDate={
