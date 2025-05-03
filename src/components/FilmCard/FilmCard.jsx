@@ -1,6 +1,5 @@
 import { Card, Tag, Rate } from 'antd'
 import { trimText } from '../../utils/utils'
-import { api } from '../../api/api'
 
 import styles from './FilmCard.module.css'
 
@@ -10,9 +9,11 @@ export default function FilmCard({
   title,
   overview,
   releaseDate,
-  popularity,
   imageURL,
   genreList,
+  addRating,
+  voteAverage,
+  rating,
 }) {
   const getRatingColor = (rating) => {
     if (rating <= 3) return '#e90000'
@@ -20,6 +21,8 @@ export default function FilmCard({
     if (rating <= 7) return '#e9d100'
     return '#66e900'
   }
+
+  const rateTooltips = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
   return (
     <Card
@@ -53,24 +56,21 @@ export default function FilmCard({
           <div className={styles.cardHeaderRight}>
             <div
               className={styles.voteAverage}
-              style={{ borderColor: getRatingColor(popularity) }}
+              style={{ borderColor: getRatingColor(voteAverage) }}
             >
-              {popularity}
+              {voteAverage}
             </div>
           </div>
         </div>
         <div className={styles.cardDescriptionWrapper}>
-          {/* <p className={styles.filmOverview}>{trimText(overview, 220)}</p> */}
-          <button
-            onClick={() => {
-              api.addRatingForMovie(filmId, 5, guestSessionId)
-            }}
-            type="button"
-          >
-            Rating 5
-          </button>
+          <p className={styles.filmOverview}>{trimText(overview, 220)}</p>
           <Rate
             className={styles.filmRating}
+            onChange={(value) => {
+              addRating(filmId, value, guestSessionId)
+            }}
+            value={rating}
+            tooltips={rateTooltips}
             count={10}
             allowHalf
           ></Rate>

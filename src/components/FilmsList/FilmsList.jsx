@@ -18,9 +18,8 @@ export default function FilmsList() {
     queryStringValue,
     genres,
     guestSessionId,
+    addRating,
   } = useFilmDataContext()
-
-  console.log('🚥 renderedList 🚥', renderedList)
 
   if (isLoading) {
     return (
@@ -87,16 +86,18 @@ export default function FilmsList() {
                 <FilmCard
                   filmId={film.id}
                   guestSessionId={guestSessionId}
+                  addRating={addRating}
                   title={film.title ? film.title : 'No title.'}
                   overview={film.overview ? film.overview : 'No overview.'}
+                  imageURL={`${getImageURL(configApi, 1)}${film.poster_path}`}
+                  genreList={getGenreListById(genres, film)}
+                  voteAverage={film.vote_average ? Number(film.vote_average.toFixed(1)) : null}
+                  rating={film.rating ? film.rating : null}
                   releaseDate={
                     film.release_date
                       ? format(new Date(film.release_date), 'MMMM d, yyyy')
                       : 'No date.'
                   }
-                  popularity={film.popularity ? Number(film.popularity.toFixed(1)) : null}
-                  imageURL={`${getImageURL(configApi, 1)}${film.poster_path}`}
-                  genreList={getGenreListById(genres, film)}
                 ></FilmCard>
               </Col>
             )

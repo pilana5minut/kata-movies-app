@@ -45,18 +45,6 @@ export function FilmDataProvider({ children }) {
     }
   }, [guestSessionId])
 
-  const fetchingGenresList = async () => {
-    setIsLoadingGenresList(true)
-    try {
-      const genresList = await api.getGenresList()
-      setGenres(genresList)
-    } catch (error) {
-      setErrorGenresList(error.message)
-    } finally {
-      setIsLoadingGenresList(false)
-    }
-  }
-
   const getConfig = async () => {
     setIsLoadingConfigApi(true)
     try {
@@ -66,27 +54,6 @@ export function FilmDataProvider({ children }) {
       setErrorConfig(error.message)
     } finally {
       setIsLoadingConfigApi(false)
-    }
-  }
-
-  const getFilmsData = async (queryStringValue, page) => {
-    setIsLoadingFilmsData(true)
-    try {
-      const data = await api.getFilms(queryStringValue, page)
-      setFilmsData(data)
-    } catch (error) {
-      setErrorFilmsData(error.message)
-    } finally {
-      setIsLoadingFilmsData(false)
-    }
-  }
-
-  const getFilmsRatedData = async (guestSessionId) => {
-    try {
-      const data = await api.getListRatedMovies(guestSessionId)
-      setFilmsRatedData(data)
-    } catch (error) {
-      setErrorFilmsRatedData(error.message)
     }
   }
 
@@ -123,6 +90,44 @@ export function FilmDataProvider({ children }) {
     }
   }
 
+  const fetchingGenresList = async () => {
+    setIsLoadingGenresList(true)
+    try {
+      const genresList = await api.getGenresList()
+      setGenres(genresList)
+    } catch (error) {
+      setErrorGenresList(error.message)
+    } finally {
+      setIsLoadingGenresList(false)
+    }
+  }
+
+  const getFilmsData = async (queryStringValue, page) => {
+    setIsLoadingFilmsData(true)
+    try {
+      const data = await api.getFilms(queryStringValue, page)
+      setFilmsData(data)
+    } catch (error) {
+      setErrorFilmsData(error.message)
+    } finally {
+      setIsLoadingFilmsData(false)
+    }
+  }
+
+  const addRating = async (movieId, ratingValue, guestSessionId) => {
+    api.addRatingForMovie(movieId, ratingValue, guestSessionId)
+    getFilmsRatedData(guestSessionId)
+  }
+
+  const getFilmsRatedData = async (guestSessionId) => {
+    try {
+      const data = await api.getListRatedMovies(guestSessionId)
+      setFilmsRatedData(data)
+    } catch (error) {
+      setErrorFilmsRatedData(error.message)
+    }
+  }
+
   const isLoading =
     isLoadingConfigApi || isLoadingFilmsData || isLoadingGenresList || isLoadingGuestSession
 
@@ -148,6 +153,7 @@ export function FilmDataProvider({ children }) {
     activeTab,
     setActiveTab,
     renderedList,
+    addRating,
   }
 
   return <FilmDataContext.Provider value={providerValue}>{children}</FilmDataContext.Provider>

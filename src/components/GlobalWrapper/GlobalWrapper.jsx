@@ -6,7 +6,6 @@ import { useFilmDataContext } from '../../contexts/FilmDataContext'
 
 import SearchBar from '../SearchBar/SearchBar'
 import FilmsList from '../FilmsList/FilmsList'
-import TempRatedList from '../TempRatedList/TempRatedList'
 
 export default function GlobalWrapper() {
   const { activeTab, setActiveTab } = useFilmDataContext()
@@ -42,7 +41,6 @@ export default function GlobalWrapper() {
     <>
       {networkStatus ? (
         <>
-          <TempRatedList />
           <Tabs
             className={styles.tabsBar}
             centered
