@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Row, Col, Spin, Alert, Empty, Pagination } from 'antd'
+import { Row, Col, Alert, Empty, Pagination } from 'antd'
 import { format } from 'date-fns'
 import { getImageURL, getGenreListById } from '../../utils/utils'
 import { useFilmDataContext } from '../../contexts/FilmDataContext'
@@ -14,15 +14,15 @@ export default function FilmsList() {
     configApi,
     errors,
     renderedList,
-    isLoading,
     getFilmsData,
     queryStringValue,
     genres,
     guestSessionId,
     addRating,
+    isLoadingFilmsData,
   } = useFilmDataContext()
 
-  if (isLoading) {
+  if (isLoadingFilmsData) {
     return (
       <Spinner
         sizeSpinner={'large'}
@@ -31,17 +31,17 @@ export default function FilmsList() {
     )
   }
 
-  // if (errors.length > 0) {
-  //   return errors.map((error, index) => (
-  //     <Alert
-  //       key={index}
-  //       className={styles.errorBanner}
-  //       type="error"
-  //       showIcon
-  //       message={error}
-  //     ></Alert>
-  //   ))
-  // }
+  if (errors.length > 0) {
+    return errors.map((error, index) => (
+      <Alert
+        key={index}
+        className={styles.errorBanner}
+        type="error"
+        showIcon
+        message={error}
+      ></Alert>
+    ))
+  }
 
   if (!renderedList) {
     return (

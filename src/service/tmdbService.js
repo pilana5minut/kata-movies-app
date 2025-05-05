@@ -47,7 +47,7 @@ export const tmdbService = {
     }
   },
 
-  async getGenresList(lang) {
+  async getGenresList(lang = 'en') {
     console.log('Выполняется запрос списка жанров...')
     try {
       const response = await fetch(`${BASE_URL}genre/movie/list?language=${lang}`, requestOptions)
@@ -93,7 +93,8 @@ export const tmdbService = {
         }
 
         if (response.status === 404) {
-          throw new Error('Список фильмов имеющих оценку не найден: код 404.')
+          console.log('Список фильмов имеющих оценку не найден: код 404.')
+          return null
         }
 
         throw new Error('Ошибка запроса фильмов имеющих оценку.')

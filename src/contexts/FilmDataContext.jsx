@@ -11,6 +11,7 @@ export function FilmDataProvider({ children }) {
 
   const [isLoadingConfigApi, setIsLoadingConfigApi] = useState(false)
   const [isLoadingFilmsData, setIsLoadingFilmsData] = useState(false)
+  const [isLoadingFilmsRatedData, setIsLoadingFilmsRatedData] = useState(false)
   const [isLoadingGenresList, setIsLoadingGenresList] = useState(false)
   const [isLoadingGuestSession, setIsLoadingGuestSession] = useState(false)
 
@@ -120,22 +121,19 @@ export function FilmDataProvider({ children }) {
   }
 
   const getFilmsRatedData = async (guestSessionId) => {
+    setIsLoadingFilmsRatedData(true)
     try {
-      if (!guestSessionId) {
-        console.log('Гостевая сессия не определена, пропускаем запрос рейтингов')
-        return
-      }
-
       const data = await tmdbService.getListRatedMovies(guestSessionId)
       console.log('Данные рейтингов получены:', data)
       setFilmsRatedData(data)
     } catch (error) {
       setErrorFilmsRatedData(error.message)
+    } finally {
+      setIsLoadingFilmsRatedData(false)
     }
   }
 
   const isLoadingInitial = isLoadingConfigApi || isLoadingGenresList || isLoadingGuestSession
-  const isLoading = isLoadingFilmsData
 
   const errors = [
     errorConfig,
@@ -146,21 +144,26 @@ export function FilmDataProvider({ children }) {
   ].filter(Boolean)
 
   const providerValue = {
-    getFilmsData,
-    filmsRatedData,
-    queryStringValue,
-    setQueryStringValue,
     configApi,
     errors,
-    filmsData,
-    isLoadingInitial,
-    isLoading,
     genres,
+
     guestSessionId,
+    queryStringValue,
     activeTab,
+
     setActiveTab,
-    renderedList,
+    setQueryStringValue,
+    getFilmsData,
     addRating,
+
+    filmsData,
+    filmsRatedData,
+    renderedList,
+
+    isLoadingInitial,
+    isLoadingFilmsData,
+    isLoadingFilmsRatedData,
   }
 
   return <FilmDataContext.Provider value={providerValue}>{children}</FilmDataContext.Provider>
