@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export default function useNetworkStatus() {
+export function useNetworkStatus() {
   const [isOnline, setIsOnline] = useState(true)
 
   const handleOnline = () => {
@@ -22,4 +22,22 @@ export default function useNetworkStatus() {
   }, [])
 
   return isOnline
+}
+
+export const useFetching = (callback) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const fetching = async (...args) => {
+    try {
+      setIsLoading(true)
+      await callback(...args)
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return [fetching, isLoading, error]
 }

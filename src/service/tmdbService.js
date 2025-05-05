@@ -11,7 +11,7 @@ const requestOptions = {
   headers: myHeaders,
 }
 
-export const api = {
+export const tmdbService = {
   async getFilms(queryValue, page = 1) {
     console.log('Выполняется запрос фильмов...')
     try {
@@ -89,13 +89,11 @@ export const api = {
 
       if (!response.ok) {
         if (response.status === 401) {
-          throw new Error(
-            'Недействительный ключ API: вам должен быть предоставлен действительный ключ.'
-          )
+          throw new Error('Недействительный ключ API: код 401.')
         }
 
         if (response.status === 404) {
-          throw new Error('Запрошенная сессия не найдена.')
+          throw new Error('Список фильмов имеющих оценку не найден: код 404.')
         }
 
         throw new Error('Ошибка запроса фильмов имеющих оценку.')

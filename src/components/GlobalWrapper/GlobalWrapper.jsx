@@ -1,15 +1,25 @@
-import { Layout, Alert, Tabs } from 'antd'
+import { Layout, Alert, Tabs, Spin } from 'antd'
 
-import useNetworkStatus from '../../utils/hooks'
+import { useNetworkStatus } from '../../utils/hooks'
 import styles from './GlobalWrapper.module.css'
 import { useFilmDataContext } from '../../contexts/FilmDataContext'
 
 import SearchBar from '../SearchBar/SearchBar'
 import FilmsList from '../FilmsList/FilmsList'
+import Spinner from '../Spinner/Spinner'
 
 export default function GlobalWrapper() {
-  const { activeTab, setActiveTab } = useFilmDataContext()
+  const { isLoadingInitial, activeTab, setActiveTab } = useFilmDataContext()
   const networkStatus = useNetworkStatus()
+
+  if (isLoadingInitial) {
+    return (
+      <Spinner
+        sizeSpinner={'large'}
+        message={'Инициализация приложения.'}
+      />
+    )
+  }
 
   const items = [
     {

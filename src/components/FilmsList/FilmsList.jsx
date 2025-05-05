@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import { getImageURL, getGenreListById } from '../../utils/utils'
 import { useFilmDataContext } from '../../contexts/FilmDataContext'
 import FilmCard from '../FilmCard/FilmCard'
+import Spinner from '../Spinner/Spinner'
 import styles from './FilmsList.module.css'
 
 export default function FilmsList() {
@@ -23,24 +24,24 @@ export default function FilmsList() {
 
   if (isLoading) {
     return (
-      <div className={styles.spinner}>
-        <Spin size="large"></Spin>
-        <span>Please wait.</span>
-      </div>
+      <Spinner
+        sizeSpinner={'large'}
+        message={'Выполняется загрузка фильмов.'}
+      />
     )
   }
 
-  if (errors.length > 0) {
-    return errors.map((error, index) => (
-      <Alert
-        key={index}
-        className={styles.errorBanner}
-        type="error"
-        showIcon
-        message={error}
-      ></Alert>
-    ))
-  }
+  // if (errors.length > 0) {
+  //   return errors.map((error, index) => (
+  //     <Alert
+  //       key={index}
+  //       className={styles.errorBanner}
+  //       type="error"
+  //       showIcon
+  //       message={error}
+  //     ></Alert>
+  //   ))
+  // }
 
   if (!renderedList) {
     return (
@@ -52,6 +53,7 @@ export default function FilmsList() {
     )
   }
 
+  console.log('🚥 renderedList 🚥', renderedList)
   return (
     <>
       {renderedList.results && renderedList.results.length > 0 ? (

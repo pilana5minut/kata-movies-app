@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { api } from '../api/api'
+import { tmdbService } from '../service/tmdbService'
 
 const FilmDataContext = createContext()
 
@@ -48,7 +48,7 @@ export function FilmDataProvider({ children }) {
   const getConfig = async () => {
     setIsLoadingConfigApi(true)
     try {
-      const config = await api.getConfigApi()
+      const config = await tmdbService.getConfigApi()
       setConfigApi(config)
     } catch (error) {
       setErrorConfig(error.message)
@@ -66,7 +66,7 @@ export function FilmDataProvider({ children }) {
         if (ExpirationDate < Date.now()) {
           console.log('(GS) Срок действия гостевой сессии истек.')
           setIsLoadingGuestSession(true)
-          const newSession = await api.createGuestSession()
+          const newSession = await tmdbService.createGuestSession()
           setGuestSessionId(newSession.guest_session_id)
           localStorage.setItem('guestSessionObject', JSON.stringify(newSession))
           console.log('(GS) Новая гостевая сессия была записана в localStorage.')
@@ -78,7 +78,7 @@ export function FilmDataProvider({ children }) {
       } else {
         console.log('(GS) Гостевая сессия еще не создана.')
         setIsLoadingGuestSession(true)
-        const newSession = await api.createGuestSession()
+        const newSession = await tmdbService.createGuestSession()
         setGuestSessionId(newSession.guest_session_id)
         localStorage.setItem('guestSessionObject', JSON.stringify(newSession))
         console.log('(GS) Новая гостевая сессия была записана в localStorage.')
@@ -93,7 +93,7 @@ export function FilmDataProvider({ children }) {
   const fetchingGenresList = async () => {
     setIsLoadingGenresList(true)
     try {
-      const genresList = await api.getGenresList()
+      const genresList = await tmdbService.getGenresList()
       setGenres(genresList)
     } catch (error) {
       setErrorGenresList(error.message)
@@ -105,7 +105,7 @@ export function FilmDataProvider({ children }) {
   const getFilmsData = async (queryStringValue, page) => {
     setIsLoadingFilmsData(true)
     try {
-      const data = await api.getFilms(queryStringValue, page)
+      const data = await tmdbService.getFilms(queryStringValue, page)
       setFilmsData(data)
     } catch (error) {
       setErrorFilmsData(error.message)
@@ -115,21 +115,27 @@ export function FilmDataProvider({ children }) {
   }
 
   const addRating = async (movieId, ratingValue, guestSessionId) => {
-    api.addRatingForMovie(movieId, ratingValue, guestSessionId)
+    tmdbService.addRatingForMovie(movieId, ratingValue, guestSessionId)
     getFilmsRatedData(guestSessionId)
   }
 
   const getFilmsRatedData = async (guestSessionId) => {
     try {
-      const data = await api.getListRatedMovies(guestSessionId)
+      if (!guestSessionId) {
+        console.log('Гостевая сессия не определена, пропускаем запрос рейтингов')
+        return
+      }
+
+      const data = await tmdbService.getListRatedMovies(guestSessionId)
+      console.log('Данные рейтингов получены:', data)
       setFilmsRatedData(data)
     } catch (error) {
       setErrorFilmsRatedData(error.message)
     }
   }
 
-  const isLoading =
-    isLoadingConfigApi || isLoadingFilmsData || isLoadingGenresList || isLoadingGuestSession
+  const isLoadingInitial = isLoadingConfigApi || isLoadingGenresList || isLoadingGuestSession
+  const isLoading = isLoadingFilmsData
 
   const errors = [
     errorConfig,
@@ -147,6 +153,7 @@ export function FilmDataProvider({ children }) {
     configApi,
     errors,
     filmsData,
+    isLoadingInitial,
     isLoading,
     genres,
     guestSessionId,
