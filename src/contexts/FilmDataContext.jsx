@@ -116,15 +116,18 @@ export function FilmDataProvider({ children }) {
   }
 
   const addRating = async (movieId, ratingValue, guestSessionId) => {
-    tmdbService.addRatingForMovie(movieId, ratingValue, guestSessionId)
-    getFilmsRatedData(guestSessionId)
+    try {
+      await tmdbService.addRatingForMovie(movieId, ratingValue, guestSessionId)
+      await getFilmsRatedData(guestSessionId)
+    } catch (error) {
+      setErrorFilmsRatedData(error.message)
+    }
   }
 
   const getFilmsRatedData = async (guestSessionId) => {
     setIsLoadingFilmsRatedData(true)
     try {
       const data = await tmdbService.getListRatedMovies(guestSessionId)
-      console.log('Данные рейтингов получены:', data)
       setFilmsRatedData(data)
     } catch (error) {
       setErrorFilmsRatedData(error.message)

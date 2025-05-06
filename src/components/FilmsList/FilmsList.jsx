@@ -53,7 +53,6 @@ export default function FilmsList() {
     )
   }
 
-  console.log('🚥 renderedList 🚥', renderedList)
   return (
     <>
       {renderedList.results && renderedList.results.length > 0 ? (
