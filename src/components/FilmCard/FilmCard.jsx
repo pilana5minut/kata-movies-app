@@ -1,5 +1,6 @@
 import { Card, Tag, Rate } from 'antd'
 import { trimText } from '../../utils/utils'
+import { useState, useEffect } from 'react'
 
 import styles from './FilmCard.module.css'
 
@@ -15,6 +16,12 @@ export default function FilmCard({
   voteAverage,
   rating,
 }) {
+  const [localRating, setLocalRating] = useState(rating)
+
+  useEffect(() => {
+    setLocalRating(rating)
+  }, [rating])
+
   const getRatingColor = (rating) => {
     if (rating <= 3) return '#e90000'
     if (rating <= 5) return '#e97e00'
@@ -23,6 +30,11 @@ export default function FilmCard({
   }
 
   const rateTooltips = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+  const handleRatingChange = async (value) => {
+    setLocalRating(value)
+    await addRating(filmId, value, guestSessionId)
+  }
 
   return (
     <Card
@@ -66,10 +78,8 @@ export default function FilmCard({
           <p className={styles.filmOverview}>{trimText(overview, 220)}</p>
           <Rate
             className={styles.filmRating}
-            onChange={(value) => {
-              addRating(filmId, value, guestSessionId)
-            }}
-            value={rating}
+            onChange={handleRatingChange}
+            value={localRating}
             tooltips={rateTooltips}
             count={10}
             allowHalf

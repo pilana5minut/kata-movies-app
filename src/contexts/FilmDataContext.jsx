@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { tmdbService } from '../service/tmdbService'
+import { replacementOfRatedFilms } from '../utils/utils'
 
 const FilmDataContext = createContext()
 
@@ -34,7 +35,11 @@ export function FilmDataProvider({ children }) {
 
   useEffect(() => {
     if (activeTab === '1') {
-      setRenderedList(filmsData)
+      if (filmsData && filmsRatedData) {
+        setRenderedList(replacementOfRatedFilms(filmsData, filmsRatedData))
+      } else {
+        setRenderedList(filmsData)
+      }
     } else if (activeTab === '2') {
       setRenderedList(filmsRatedData)
     }
