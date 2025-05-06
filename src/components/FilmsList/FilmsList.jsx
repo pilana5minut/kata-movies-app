@@ -55,26 +55,6 @@ export default function FilmsList() {
 
   return (
     <>
-      {renderedList.results && renderedList.results.length > 0 ? (
-        <Pagination
-          align="center"
-          size="small"
-          showSizeChanger={false}
-          total={renderedList.total_results}
-          pageSize={renderedList.results.length}
-          current={currentPage}
-          onChange={(page) => {
-            getFilmsData(queryStringValue, page)
-            setCurrentPage(page)
-          }}
-        />
-      ) : (
-        <Empty
-          className={styles.empty}
-          description="No data to display."
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-        ></Empty>
-      )}
       <Row
         className={styles.filmsList}
         gutter={[36, 36]}
@@ -104,6 +84,27 @@ export default function FilmsList() {
             )
           })}
       </Row>
+      {renderedList.results && renderedList.results.length > 0 ? (
+        <Pagination
+          className={styles.pagination}
+          align="center"
+          size="small"
+          showSizeChanger={false}
+          total={renderedList.total_results}
+          pageSize={renderedList.results.length}
+          current={currentPage}
+          onChange={(page) => {
+            getFilmsData(queryStringValue, page)
+            setCurrentPage(page)
+          }}
+        />
+      ) : (
+        <Empty
+          className={styles.empty}
+          description="No data to display."
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+        ></Empty>
+      )}
     </>
   )
 }

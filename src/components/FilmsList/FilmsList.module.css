@@ -1,5 +1,5 @@
 .filmsList {
-  margin-top: 10px;
+  margin-bottom: 20px;
   container-type: inline-size;
 }
 
@@ -9,4 +9,15 @@
 
 .empty {
   margin: 10px 0;
+}
+
+.pagination {
+  :global(.ant-pagination-item-active) {
+    background-color: #1890ff;
+    border-color: #1890ff;
+
+    a {
+      color: white;
+    }
+  }
 }

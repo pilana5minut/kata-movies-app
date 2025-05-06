@@ -8,7 +8,7 @@ export default function SearchBar() {
   const [currentStringValue, setCurrentStringValue] = useState('')
 
   const debouncedSearch = useCallback(
-    debounce(777, (queryString) => {
+    debounce(555, (queryString) => {
       setQueryStringValue(queryString)
       getFilmsData(queryString)
     }),
@@ -22,6 +22,7 @@ export default function SearchBar() {
 
   return (
     <Input
+      placeholder="Type to search..."
       value={currentStringValue}
       onChange={(e) => handleSearchQuery(e)}
     />
