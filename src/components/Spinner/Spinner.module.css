@@ -1,0 +1,12 @@
+.spinner {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+
+  > span {
+    margin-top: 20px;
+    color: #6f9ddd;
+  }
+}

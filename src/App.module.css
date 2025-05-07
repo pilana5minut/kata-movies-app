@@ -1,0 +1,24 @@
+/* .tabsBar {
+  background-color: white;
+  :global(.ant-tabs-nav) {
+    &::before {
+      display: none;
+    }
+  }
+}
+
+.header {
+  height: auto;
+  padding: 0 35px;
+  background-color: white;
+}
+
+.content {
+  padding: 0 20px;
+  background-color: white;
+}
+
+.warningBanner {
+  max-width: 900px;
+  margin: 10px auto;
+} */
