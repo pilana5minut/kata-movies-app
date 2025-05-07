@@ -1,13 +1,6 @@
 .filmsList {
-  margin-top: 10px;
+  margin-bottom: 20px;
   container-type: inline-size;
-}
-
-.spinner {
-  min-height: 100%;
-  margin-top: 50px;
-  display: flex;
-  justify-content: center;
 }
 
 .errorBanner {
@@ -16,4 +9,15 @@
 
 .empty {
   margin: 10px 0;
+}
+
+.pagination {
+  :global(.ant-pagination-item-active) {
+    background-color: #1890ff;
+    border-color: #1890ff;
+
+    a {
+      color: white;
+    }
+  }
 }

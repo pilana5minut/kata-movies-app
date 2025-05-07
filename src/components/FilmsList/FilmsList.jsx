@@ -1,27 +1,51 @@
-import { Row, Col, Spin, Alert, Empty, Pagination } from 'antd'
+import { useState } from 'react'
+import { Row, Col, Alert, Empty, Pagination } from 'antd'
 import { format } from 'date-fns'
-import { getImageURL } from '../../utils/utils'
+import { getImageURL, getGenreListById } from '../../utils/utils'
 import { useFilmDataContext } from '../../contexts/FilmDataContext'
 import FilmCard from '../FilmCard/FilmCard'
+import Spinner from '../Spinner/Spinner'
 import styles from './FilmsList.module.css'
-import { useState } from 'react'
 
 export default function FilmsList() {
-  const { configApi, errors, filmsData, isLoading, getFilmsData, queryStringValue } =
-    useFilmDataContext()
   const [currentPage, setCurrentPage] = useState(1)
 
-  if (isLoading) {
+  const {
+    configApi,
+    errors,
+    renderedList,
+    getFilmsData,
+    queryStringValue,
+    genres,
+    guestSessionId,
+    addRating,
+    activeTab,
+    isLoadingFilmsData,
+    isLoadingFilmsRatedData,
+  } = useFilmDataContext()
+
+  if (activeTab === '1' && isLoadingFilmsData) {
     return (
-      <div className={styles.spinner}>
-        <Spin size="large"></Spin>
-      </div>
+      <Spinner
+        sizeSpinner={'large'}
+        message={'Загрузка фильмов'}
+      />
+    )
+  }
+
+  if (activeTab === '2' && isLoadingFilmsRatedData) {
+    return (
+      <Spinner
+        sizeSpinner={'large'}
+        message={'Загрузка оцененных фильмов'}
+      />
     )
   }
 
   if (errors.length > 0) {
-    return errors.map((error) => (
+    return errors.map((error, index) => (
       <Alert
+        key={index}
         className={styles.errorBanner}
         type="error"
         showIcon
@@ -30,69 +54,77 @@ export default function FilmsList() {
     ))
   }
 
-  if (!filmsData) {
+  if (activeTab === '1' && !renderedList) {
     return (
       <Empty
         className={styles.empty}
-        description="Данные отсутствуют."
+        description="Не найдено"
+        image={Empty.PRESENTED_IMAGE_SIMPLE}
       ></Empty>
     )
   }
 
-  // console.log('🚥 filmsData.results 🚥', filmsData.results)
-  // filmsData.results.forEach((film, index) => {
-  //   if (index <= 5) {
-  //     console.log('film id: ', film.id)
-  //   }
-  // })
-  // console.log('🚥 filmsData.page 🚥', filmsData.page)
-  // console.log('🚥 filmsData.total_pages 🚥', filmsData.total_pages)
-  // console.log('🚥 filmsData.total_results 🚥', filmsData.total_results)
+  if (activeTab === '2' && !renderedList) {
+    return (
+      <Empty
+        className={styles.empty}
+        description="Список оцененных фильмов пуст"
+      ></Empty>
+    )
+  }
 
   return (
     <>
-      {filmsData.results.length > 0 ? (
+      <Row
+        className={styles.filmsList}
+        gutter={[36, 36]}
+        justify="center "
+      >
+        {renderedList.results &&
+          renderedList.results.map((film) => {
+            return (
+              <Col key={film.id}>
+                <FilmCard
+                  filmId={film.id}
+                  guestSessionId={guestSessionId}
+                  addRating={addRating}
+                  title={film.title ? film.title : 'No title.'}
+                  overview={film.overview ? film.overview : 'No overview.'}
+                  imageURL={`${getImageURL(configApi, 1)}${film.poster_path}`}
+                  genreList={getGenreListById(genres, film)}
+                  voteAverage={film.vote_average ? Number(film.vote_average.toFixed(1)) : null}
+                  rating={film.rating ? film.rating : null}
+                  releaseDate={
+                    film.release_date
+                      ? format(new Date(film.release_date), 'MMMM d, yyyy')
+                      : 'No date.'
+                  }
+                ></FilmCard>
+              </Col>
+            )
+          })}
+      </Row>
+      {renderedList.results && renderedList.results.length >= 20 ? (
         <Pagination
+          className={styles.pagination}
           align="center"
           size="small"
           showSizeChanger={false}
-          total={filmsData.total_results}
-          pageSize={filmsData.results.length}
+          total={renderedList.total_results}
+          pageSize={renderedList.results.length}
           current={currentPage}
           onChange={(page) => {
             getFilmsData(queryStringValue, page)
             setCurrentPage(page)
           }}
         />
-      ) : (
+      ) : renderedList.results && renderedList.results.length < 20 ? null : (
         <Empty
           className={styles.empty}
-          description="Данные отсутствуют."
+          description="No data to display."
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
         ></Empty>
       )}
-      <Row
-        className={styles.filmsList}
-        gutter={[36, 36]}
-        justify="center "
-      >
-        {filmsData.results.map((film) => {
-          return (
-            <Col key={film.id}>
-              <FilmCard
-                title={film.title ? film.title : 'No title.'}
-                overview={film.overview ? film.overview : 'No overview.'}
-                releaseDate={
-                  film.release_date
-                    ? format(new Date(film.release_date), 'MMMM d, yyyy')
-                    : 'No date.'
-                }
-                popularity={film.popularity ? Number(film.popularity.toFixed(1)) : null}
-                imageURL={`${getImageURL(configApi, 1)}${film.poster_path}`}
-              ></FilmCard>
-            </Col>
-          )
-        })}
-      </Row>
     </>
   )
 }
