@@ -70,24 +70,24 @@ export function FilmDataProvider({ children }) {
         const ExpirationDate = Date.parse(guestSessionObject.expires_at)
 
         if (ExpirationDate < Date.now()) {
-          console.log('(GS) Срок действия гостевой сессии истек.')
+          console.log('(gS) Срок действия гостевой сессии истек.')
           setIsLoadingGuestSession(true)
           const newSession = await tmdbService.createGuestSession()
           setGuestSessionId(newSession.guest_session_id)
           localStorage.setItem('guestSessionObject', JSON.stringify(newSession))
-          console.log('(GS) Новая гостевая сессия была записана в localStorage.')
+          console.log('(gS) Новая гостевая сессия была записана в localStorage.')
         } else {
-          console.log('(GS) Гостевая сессия уже существует.')
+          console.log('(gS) Гостевая сессия уже существует.')
           const guestSessionObject = JSON.parse(localStorage.getItem('guestSessionObject'))
           setGuestSessionId(guestSessionObject.guest_session_id)
         }
       } else {
-        console.log('(GS) Гостевая сессия еще не создана.')
+        console.log('(gS) Гостевая сессия еще не создана.')
         setIsLoadingGuestSession(true)
         const newSession = await tmdbService.createGuestSession()
         setGuestSessionId(newSession.guest_session_id)
         localStorage.setItem('guestSessionObject', JSON.stringify(newSession))
-        console.log('(GS) Новая гостевая сессия была записана в localStorage.')
+        console.log('(gS) Новая гостевая сессия была записана в localStorage.')
       }
     } catch (error) {
       setErrorGuestSession(error.message)

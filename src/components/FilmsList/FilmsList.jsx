@@ -19,14 +19,25 @@ export default function FilmsList() {
     genres,
     guestSessionId,
     addRating,
+    activeTab,
     isLoadingFilmsData,
+    isLoadingFilmsRatedData,
   } = useFilmDataContext()
 
-  if (isLoadingFilmsData) {
+  if (activeTab === '1' && isLoadingFilmsData) {
     return (
       <Spinner
         sizeSpinner={'large'}
-        message={'Выполняется загрузка фильмов.'}
+        message={'Загрузка фильмов'}
+      />
+    )
+  }
+
+  if (activeTab === '2' && isLoadingFilmsRatedData) {
+    return (
+      <Spinner
+        sizeSpinner={'large'}
+        message={'Загрузка оцененных фильмов'}
       />
     )
   }
@@ -43,12 +54,21 @@ export default function FilmsList() {
     ))
   }
 
-  if (!renderedList) {
+  if (activeTab === '1' && !renderedList) {
     return (
       <Empty
         className={styles.empty}
-        description="No data to display."
+        description="Не найдено"
         image={Empty.PRESENTED_IMAGE_SIMPLE}
+      ></Empty>
+    )
+  }
+
+  if (activeTab === '2' && !renderedList) {
+    return (
+      <Empty
+        className={styles.empty}
+        description="Список оцененных фильмов пуст"
       ></Empty>
     )
   }
@@ -84,7 +104,7 @@ export default function FilmsList() {
             )
           })}
       </Row>
-      {renderedList.results && renderedList.results.length > 0 ? (
+      {renderedList.results && renderedList.results.length >= 20 ? (
         <Pagination
           className={styles.pagination}
           align="center"
@@ -98,7 +118,7 @@ export default function FilmsList() {
             setCurrentPage(page)
           }}
         />
-      ) : (
+      ) : renderedList.results && renderedList.results.length < 20 ? null : (
         <Empty
           className={styles.empty}
           description="No data to display."

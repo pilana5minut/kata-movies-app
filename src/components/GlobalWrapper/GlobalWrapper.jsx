@@ -1,4 +1,4 @@
-import { Layout, Alert, Tabs, Spin } from 'antd'
+import { Layout, Alert, Tabs } from 'antd'
 
 import { useNetworkStatus } from '../../utils/hooks'
 import styles from './GlobalWrapper.module.css'
@@ -64,7 +64,7 @@ export default function GlobalWrapper() {
           className={styles.warningBanner}
           type="warning"
           showIcon
-          message="Отсутствует подключение к интернету!"
+          message="Отсутствует подключение к интернету"
         ></Alert>
       )}
     </>

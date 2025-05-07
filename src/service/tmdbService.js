@@ -13,7 +13,7 @@ const requestOptions = {
 
 export const tmdbService = {
   async getFilms(queryValue, page = 1) {
-    console.log('Выполняется запрос фильмов...')
+    console.log(`(gF) Выполняется поиск по запросу "${queryValue}" ...`)
     try {
       const response = await fetch(
         `${BASE_URL}search/movie?query=${queryValue}&page=${page}`,
@@ -21,10 +21,10 @@ export const tmdbService = {
       )
 
       if (!response.ok) {
-        throw new Error('Ошибка запроса данных о фильмах.')
+        throw new Error('(gF) Ошибка запроса данных о фильмах')
       }
 
-      console.log('Список фильмов получен.')
+      console.log(`(gF) Список фильмов по запросу "${queryValue}" получен.`)
       return await response.json()
     } catch (error) {
       throw new Error(error.message)
@@ -32,15 +32,15 @@ export const tmdbService = {
   },
 
   async getConfigApi() {
-    console.log('Выполняется запрос конфигурации API...')
+    console.log('(cF) Выполняется запрос конфигурации API...')
     try {
       const response = await fetch(`${BASE_URL}configuration`, requestOptions)
 
       if (!response.ok) {
-        throw new Error('Ошибка запроса конфигурации API')
+        throw new Error('(cF) Ошибка запроса конфигурации API')
       }
 
-      console.log('Конфигурации API получена.')
+      console.log('(cF) Конфигурации API получена.')
       return await response.json()
     } catch (error) {
       throw new Error(error.message)
@@ -48,15 +48,15 @@ export const tmdbService = {
   },
 
   async getGenresList(lang = 'en') {
-    console.log('Выполняется запрос списка жанров...')
+    console.log('(gL) Выполняется запрос списка жанров...')
     try {
       const response = await fetch(`${BASE_URL}genre/movie/list?language=${lang}`, requestOptions)
 
       if (!response.ok) {
-        throw new Error('Ошибка запроса списка жанров')
+        throw new Error('(gL) Ошибка запроса списка жанров')
       }
 
-      console.log('Список жанров получен.')
+      console.log('(gL) Список жанров получен.')
       return await response.json()
     } catch (error) {
       throw new Error(error.message)
@@ -65,14 +65,14 @@ export const tmdbService = {
 
   async createGuestSession() {
     try {
-      console.log('(GS) Выполняется запрос новой гостевой сессии...')
+      console.log('(gS) Выполняется запрос новой гостевой сессии...')
       const response = await fetch(`${BASE_URL}authentication/guest_session/new`, requestOptions)
 
       if (!response.ok) {
-        throw new Error('Ошибка при создании гостевой сессии.')
+        throw new Error('(gS) Ошибка при создании гостевой сессии')
       }
 
-      console.log('(GS) Была создана новая гостевая сессия.')
+      console.log('(gS) Была создана новая гостевая сессия.')
       return await response.json()
     } catch (error) {
       throw new Error(error.message)
@@ -80,7 +80,7 @@ export const tmdbService = {
   },
 
   async getListRatedMovies(guestSessionId) {
-    console.log('Выполняется запрос фильмов имеющих оценку...')
+    console.log('(rL) Выполняется запрос фильмов имеющих оценку...')
     try {
       const response = await fetch(
         `${BASE_URL}guest_session/${guestSessionId}/rated/movies`,
@@ -89,20 +89,20 @@ export const tmdbService = {
 
       if (!response.ok) {
         if (response.status === 401) {
-          throw new Error('Недействительный ключ API: код 401.')
+          throw new Error('(rL) Недействительный ключ API: код 401')
         }
 
         if (response.status === 404) {
           console.warn(
-            'Список фильмов имеющих оценку не найден, так как в рамках текущей гостевой сессии не одному из фильмов еще не была присвоена оценка. Сервер ответил с кодом: 404.'
+            '(rL) Список фильмов имеющих оценку не найден, так как в рамках текущей гостевой сессии не одному из фильмов еще не была присвоена оценка. Сервер ответил с кодом: 404.'
           )
           return null
         }
 
-        throw new Error('Ошибка запроса фильмов имеющих оценку.')
+        throw new Error('(rL) Ошибка запроса фильмов имеющих оценку')
       }
 
-      console.log('Список фильмов имеющих оценку получен.')
+      console.log('(rL) Список фильмов имеющих оценку получен.')
       return await response.json()
     } catch (error) {
       throw new Error(error.message)
@@ -120,6 +120,7 @@ export const tmdbService = {
       body: JSON.stringify({ value: ratingValue }),
     }
 
+    console.log('(aR) Добавляем оценку фильму...')
     try {
       const response = await fetch(
         `${BASE_URL}movie/${movieId}/rating?guest_session_id=${guestSessionId}`,
@@ -127,11 +128,10 @@ export const tmdbService = {
       )
 
       if (!response.ok) {
-        throw new Error('Ошибка при добавлении рейтинга для фильма.')
+        throw new Error('(aR) Ошибка при добавлении оценки фильму')
       }
 
-      const data = await response.json()
-      console.log('Оценка фильму успешно добавлена.', data)
+      console.log('(aR) Оценка фильму успешно добавлена.')
     } catch (error) {
       throw new Error(error.message)
     }
